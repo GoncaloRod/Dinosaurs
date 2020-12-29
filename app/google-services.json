@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "136142920887",
+    "project_id": "dinosaurs-b020c",
+    "storage_bucket": "dinosaurs-b020c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136142920887:android:4699ebfe362143d7e5c132",
+        "android_client_info": {
+          "package_name": "com.goncalorod.dinosaurs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136142920887-0ifhjvo3ff34rmp1l2j34akqj2dvqvt3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmc3cgvQL5MJpw5OjAwdyMT9wRhsaM1J0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "136142920887-0ifhjvo3ff34rmp1l2j34akqj2dvqvt3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
