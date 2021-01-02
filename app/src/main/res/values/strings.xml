@@ -3,4 +3,8 @@
 
     <!-- Sign in activity -->
     <string name="sign_in_activity_sign_in_failed">Sign in failed!</string>
+
+    <!-- Main activity -->
+    <string name="main_activity_play_button">Play</string>
+    <string name="main_activity_leaderboard_button">Leaderboard</string>
 </resources>
