@@ -36,10 +36,6 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         user = auth.currentUser!!
 
-        /* TODO:
-            Get current weather from API and lock play button while weather is being downloaded
-         */
-
         getLocation()
 
         playButton = findViewById(R.id.button_Play)
