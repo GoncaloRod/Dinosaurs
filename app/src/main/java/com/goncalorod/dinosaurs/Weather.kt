@@ -20,6 +20,10 @@ class Weather {
 
     val condition : WeatherCondition
         get() {
+            /*
+             * More about this codes:
+             * https://openweathermap.org/weather-conditions
+             */
             return when {
                 conditionID > 800 -> WeatherCondition.CLOUDS
                 conditionID == 800 -> WeatherCondition.CLEAR

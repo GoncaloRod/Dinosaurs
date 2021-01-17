@@ -15,7 +15,7 @@ import androidx.annotation.RequiresApi
 
 class GameView : SurfaceView, Runnable {
 
-    var weather : Weather? = null
+    private var weather : Weather? = null
 
     private var playing = false
     private var gameThread: Thread? = null
@@ -31,28 +31,48 @@ class GameView : SurfaceView, Runnable {
     private lateinit var player: Player
     private lateinit var cactus: Cactus
 
-    private fun init(context: Context?, width: Int, height: Int){
+    private var sun: Sun? = null
+
+    private fun init(context: Context?, width: Int, height: Int, weather: Weather?){
         surfaceHolder = holder
+
+        this.weather = weather
 
         screenWidth = width
         screenHeight = height
 
         player = Player(context, screenWidth, screenHeight)
         cactus = Cactus(context, screenWidth, screenHeight)
+
+        when (weather?.condition) {
+            WeatherCondition.THUNDERSTORM -> TODO()
+            WeatherCondition.DRIZZLE -> TODO()
+            WeatherCondition.RAIN -> TODO()
+            WeatherCondition.SNOW -> TODO()
+            WeatherCondition.ATMOSPHERE -> TODO()
+            WeatherCondition.CLEAR -> {
+                sun = Sun(context, screenWidth, screenHeight)
+            }
+            WeatherCondition.CLOUDS -> {
+                sun = Sun(context, screenWidth, screenHeight)
+            }
+            WeatherCondition.NONE -> TODO()
+            null -> TODO()
+        }
     }
 
-    constructor(context: Context?, width: Int, height: Int) : super(context){
-        init(context, width, height)
+    constructor(context: Context?, width: Int, height: Int, weather: Weather?) : super(context){
+        init(context, width, height, weather)
     }
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs){
-        init(context, 0, 0)
+        init(context, 0, 0, null)
     }
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
             context,
             attrs,
             defStyleAttr
     ){
-        init(context, 0, 0)
+        init(context, 0, 0, null)
     }
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(
@@ -61,7 +81,7 @@ class GameView : SurfaceView, Runnable {
             defStyleAttr: Int,
             defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes){
-        init(context, 0, 0)
+        init(context, 0, 0, null)
     }
 
     override fun run() {
@@ -95,6 +115,8 @@ class GameView : SurfaceView, Runnable {
                 player.draw(canvas, paint)
                 cactus.draw(canvas, paint)
 
+                sun?.draw(canvas, paint)
+
                 surfaceHolder?.unlockCanvasAndPost(canvas)
             }
         }
@@ -121,7 +143,7 @@ class GameView : SurfaceView, Runnable {
                 if (player.alive)
                     player.jump()
                 else
-                    init(context, screenWidth, screenHeight)
+                    init(context, screenWidth, screenHeight, weather)
             }
         }
         return true

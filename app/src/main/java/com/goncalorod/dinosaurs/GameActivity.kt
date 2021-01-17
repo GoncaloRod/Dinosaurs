@@ -22,8 +22,7 @@ class GameActivity : AppCompatActivity() {
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        gameView = GameView(this, size.x, size.y)
-        gameView?.weather = weather
+        gameView = GameView(this, size.x, size.y, weather)
 
         setContentView(gameView)
     }
