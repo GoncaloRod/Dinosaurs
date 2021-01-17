@@ -21,7 +21,10 @@ class Player {
     private var frames = 0
     private var animationFrame = 1
 
+    private var speedY = 0
     private var posY = 0
+
+    private var grounded = true
 
     constructor(context: Context?, width: Int, height: Int) {
         runSprite1 = BitmapFactory.decodeResource(context?.resources, R.drawable.dinorun1)
@@ -40,6 +43,17 @@ class Player {
     }
 
     fun update() {
+        // Update position
+        posY += speedY
+
+        if (posY < 0)
+            posY = 0
+
+        grounded = posY == 0
+
+        if (!grounded)
+            speedY -= 2
+
         // Animation
         frames++
 
@@ -60,9 +74,18 @@ class Player {
         canvas?.drawBitmap(spriteToDraw, 150f - offsetX, maxY - offsetY - posY- 450f, paint)
     }
 
+    fun jump() {
+        if (!grounded)
+            return
+
+        speedY = jumpSpeed
+    }
+
     companion object {
         private const val spriteScale = 15
 
         private const val animationFrames = 4
+
+        private const val jumpSpeed = 35
     }
 }
