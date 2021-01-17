@@ -11,8 +11,6 @@ class Player {
 
     private var user: FirebaseUser
 
-    private var alive = true
-
     private var maxX: Int
     private var maxY: Int
 
@@ -33,10 +31,12 @@ class Player {
 
     private var grounded = true
 
-    var boundingBox: Rect
+    private var score: Float = 0f
+
+    var alive = true
         private set
 
-    var score: Float = 0f
+    var boundingBox: Rect
         private set
 
     constructor(context: Context?, width: Int, height: Int) {
@@ -135,12 +135,16 @@ class Player {
     private fun storeScore() {
         val db = Firebase.firestore
 
-        val score = hashMapOf(
-            "player_name" to user.displayName,
-            "score" to score.toInt()
-        )
+        db.collection("scores").document(user.uid).get().addOnSuccessListener {
+            if (it.getLong("score")!!.toInt() <= score) {
+                val score = hashMapOf(
+                        "player_name" to user.displayName,
+                        "score" to score.toInt()
+                )
 
-        db.collection("scores").document(user.uid).set(score)
+                db.collection("scores").document(user.uid).set(score)
+            }
+        }
     }
 
     companion object {

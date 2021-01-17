@@ -118,7 +118,10 @@ class GameView : SurfaceView, Runnable {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action){
             MotionEvent.ACTION_DOWN -> {
-                player.jump()
+                if (player.alive)
+                    player.jump()
+                else
+                    init(context, screenWidth, screenHeight)
             }
         }
         return true
