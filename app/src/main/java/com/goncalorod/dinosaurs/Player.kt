@@ -1,12 +1,17 @@
 package com.goncalorod.dinosaurs
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class Player {
+
+    private var user: FirebaseUser
+
+    private var alive = true
 
     private var maxX: Int
     private var maxY: Int
@@ -26,7 +31,15 @@ class Player {
 
     private var grounded = true
 
+    var boundingBox: Rect
+        private set
+
+    var score: Float = 0f
+        private set
+
     constructor(context: Context?, width: Int, height: Int) {
+        user = Firebase.auth.currentUser!!
+
         runSprite1 = BitmapFactory.decodeResource(context?.resources, R.drawable.dinorun1)
         runSprite2 = BitmapFactory.decodeResource(context?.resources, R.drawable.dinorun2)
         deadSprite = BitmapFactory.decodeResource(context?.resources, R.drawable.dinodead)
@@ -40,9 +53,17 @@ class Player {
 
         maxX = width
         maxY = height
+
+        boundingBox = Rect((150 - offsetX).toInt(), (maxY - offsetY - posY - 450).toInt(), runSprite1.width, runSprite2.height)
     }
 
     fun update() {
+        if (!alive)
+            return
+
+        // Increment score
+        score += 0.25f
+
         // Update position
         posY += speedY
 
@@ -53,6 +74,12 @@ class Player {
 
         if (!grounded)
             speedY -= 2
+
+        // Update bounding box
+        boundingBox.left    = (150 - offsetX).toInt()
+        boundingBox.top     = ((maxY - offsetY - posY - 450).toInt())
+        boundingBox.right   = boundingBox.left + runSprite1.width
+        boundingBox.bottom  = boundingBox.top + runSprite1.height
 
         // Animation
         frames++
@@ -66,19 +93,50 @@ class Player {
     }
 
     fun draw(canvas: Canvas?, paint: Paint) {
-        val spriteToDraw = if (animationFrame == 1)
-            runSprite1
-        else
-            runSprite2
+        val spriteToDraw = if (alive) {
+            if (animationFrame == 1) {
+                runSprite1
+            }
+            else {
+                runSprite2
+            }
+        }
+        else {
+            deadSprite
+        }
 
         canvas?.drawBitmap(spriteToDraw, 150f - offsetX, maxY - offsetY - posY - 450f, paint)
+
+        paint.color = Color.WHITE
+        paint.textSize = textSize
+        canvas?.drawText("Score: ${score.toInt()}", scoreOffsetX, textSize + scoreOffsetY, paint)
     }
 
     fun jump() {
-        if (!grounded)
+        if (!grounded or !alive)
             return
 
         speedY = jumpSpeed
+    }
+
+    fun die() {
+        if (!alive)
+            return
+
+        alive = false
+
+        storeScore()
+    }
+
+    private fun storeScore() {
+        val db = Firebase.firestore
+
+        val score = hashMapOf(
+            "player_name" to user.displayName,
+            "score" to score.toInt()
+        )
+
+        db.collection("scores").document(user.uid).set(score)
     }
 
     companion object {
@@ -87,5 +145,9 @@ class Player {
         private const val animationFrames = 4
 
         private const val jumpSpeed = 30
+
+        private const val textSize = 60f
+        private const val scoreOffsetX = 15f
+        private const val scoreOffsetY = 15f
     }
 }

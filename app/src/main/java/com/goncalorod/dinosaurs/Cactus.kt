@@ -1,13 +1,12 @@
 package com.goncalorod.dinosaurs
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
 import java.util.*
 
 class Cactus {
+
+    private var running = true
 
     private val random: Random
 
@@ -21,6 +20,9 @@ class Cactus {
 
     private var posX = 0
 
+    var boundingBox: Rect
+        private set
+
     constructor(context: Context?, width: Int, height: Int) {
         sprite = BitmapFactory.decodeResource(context?.resources, R.drawable.cactus)
         sprite = Bitmap.createScaledBitmap(sprite, sprite.width / spriteScale, sprite.height / spriteScale, false)
@@ -33,13 +35,23 @@ class Cactus {
 
         random = Random()
         generatePosition()
+
+        boundingBox = Rect((posX - offsetX).toInt(), (maxY - offsetY - 450).toInt(), sprite.width, sprite.height)
     }
 
     fun update() {
+        if (!running)
+            return
+
         posX -= speed
 
         if (posX < -offsetX)
             generatePosition()
+
+        boundingBox.left    = (posX - offsetX).toInt()
+        boundingBox.top     = ((maxY - offsetY - 450).toInt())
+        boundingBox.right   = boundingBox.left + sprite.width
+        boundingBox.bottom  = boundingBox.top + sprite.height
     }
 
     fun draw(canvas: Canvas?, paint: Paint) {
@@ -48,6 +60,10 @@ class Cactus {
 
     private fun generatePosition() {
         posX = maxX + 300 + (-250 + random.nextInt(500))
+    }
+
+    fun stop() {
+        running = false
     }
 
     companion object {
