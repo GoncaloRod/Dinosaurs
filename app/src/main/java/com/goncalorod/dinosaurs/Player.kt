@@ -16,6 +16,8 @@ class Player {
     private var maxX: Int
     private var maxY: Int
 
+    private var context: Context?
+
     private var runSprite1: Bitmap
     private var runSprite2: Bitmap
     private var deadSprite: Bitmap
@@ -39,6 +41,8 @@ class Player {
 
     constructor(context: Context?, width: Int, height: Int) {
         user = Firebase.auth.currentUser!!
+
+        this.context = context
 
         runSprite1 = BitmapFactory.decodeResource(context?.resources, R.drawable.dinorun1)
         runSprite2 = BitmapFactory.decodeResource(context?.resources, R.drawable.dinorun2)
@@ -107,7 +111,7 @@ class Player {
 
         canvas?.drawBitmap(spriteToDraw, 150f - offsetX, maxY - offsetY - posY - 450f, paint)
 
-        paint.color = Color.WHITE
+        paint.color = context?.resources?.getColor(R.color.game_paint_color) ?: Color.RED
         paint.textSize = textSize
         canvas?.drawText("Score: ${score.toInt()}", scoreOffsetX, textSize + scoreOffsetY, paint)
     }
