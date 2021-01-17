@@ -17,17 +17,18 @@ class GameView : SurfaceView, Runnable {
     var weather : Weather? = null
 
     private var playing = false
-    private var gameThread : Thread? = null
+    private var gameThread: Thread? = null
 
-    private var surfaceHolder : SurfaceHolder? = null
-    private var canvas : Canvas? = null
+    private var surfaceHolder: SurfaceHolder? = null
+    private var canvas: Canvas? = null
 
-    private var paint : Paint = Paint()
+    private var paint: Paint = Paint()
 
     private var screenWidth = 0
     private var screenHeight = 0
 
-    private lateinit var player : Player
+    private lateinit var player: Player
+    private lateinit var cactus: Cactus
 
     private fun init(context: Context?, width: Int, height: Int){
         surfaceHolder = holder
@@ -36,6 +37,7 @@ class GameView : SurfaceView, Runnable {
         screenHeight = height
 
         player = Player(context, screenWidth, screenHeight)
+        cactus = Cactus(context, screenWidth, screenHeight)
     }
 
     constructor(context: Context?, width: Int, height: Int) : super(context){
@@ -71,6 +73,7 @@ class GameView : SurfaceView, Runnable {
 
     private fun update(){
         player.update()
+        cactus.update()
     }
 
     private fun draw(){
@@ -84,6 +87,7 @@ class GameView : SurfaceView, Runnable {
                 canvas?.drawLine(0f, height - 500f, width.toFloat(), height - 500f, paint)
 
                 player.draw(canvas, paint)
+                cactus.draw(canvas, paint)
 
                 surfaceHolder?.unlockCanvasAndPost(canvas)
             }

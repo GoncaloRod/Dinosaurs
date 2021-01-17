@@ -8,15 +8,15 @@ import android.graphics.Paint
 
 class Player {
 
-    private var maxX = 0
-    private var maxY = 0
+    private var maxX: Int
+    private var maxY: Int
 
-    private var runSprite1 : Bitmap
-    private var runSprite2 : Bitmap
-    private var deadSprite : Bitmap
+    private var runSprite1: Bitmap
+    private var runSprite2: Bitmap
+    private var deadSprite: Bitmap
 
-    private var offsetX : Float
-    private var offsetY : Float
+    private var offsetX: Float
+    private var offsetY: Float
 
     private var frames = 0
     private var animationFrame = 1
@@ -71,7 +71,7 @@ class Player {
         else
             runSprite2
 
-        canvas?.drawBitmap(spriteToDraw, 150f - offsetX, maxY - offsetY - posY- 450f, paint)
+        canvas?.drawBitmap(spriteToDraw, 150f - offsetX, maxY - offsetY - posY - 450f, paint)
     }
 
     fun jump() {
@@ -86,6 +86,6 @@ class Player {
 
         private const val animationFrames = 4
 
-        private const val jumpSpeed = 35
+        private const val jumpSpeed = 30
     }
 }
