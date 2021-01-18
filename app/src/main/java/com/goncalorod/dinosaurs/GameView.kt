@@ -35,6 +35,7 @@ class GameView : SurfaceView, Runnable {
     private var clouds: Clouds? = null
     private var thunder: Thunder? = null
     private var rainInstances = arrayListOf<Rain>()
+    private var snowInstances = arrayListOf<Snow>()
 
     private fun init(context: Context?, width: Int, height: Int, weather: Weather?){
         surfaceHolder = holder
@@ -48,10 +49,10 @@ class GameView : SurfaceView, Runnable {
         cactus = Cactus(context, screenWidth, screenHeight)
 
         //var condition = weather?.condition
-        var condition = WeatherCondition.THUNDERSTORM
+        //var condition = WeatherCondition.THUNDERSTORM
         //var condition = WeatherCondition.DRIZZLE
         //var condition = WeatherCondition.RAIN
-        //var condition = WeatherCondition.SNOW
+        var condition = WeatherCondition.SNOW
         //var condition = WeatherCondition.ATMOSPHERE
         //var condition = WeatherCondition.CLEAR
         //var condition = WeatherCondition.CLOUDS
@@ -78,7 +79,9 @@ class GameView : SurfaceView, Runnable {
             }
             WeatherCondition.SNOW -> {
                 clouds = Clouds(context, screenWidth, screenHeight)
-                // TODO: Snow
+                for (i in 0 until heavyRainAmount) {
+                    snowInstances.add(Snow(context, screenWidth, screenHeight))
+                }
             }
             WeatherCondition.ATMOSPHERE -> {
                 clouds = Clouds(context, screenWidth, screenHeight)
@@ -135,6 +138,10 @@ class GameView : SurfaceView, Runnable {
             rain.update()
         }
 
+        for (snow in snowInstances) {
+            snow.update()
+        }
+
         if (Rect.intersects(player.boundingBox, cactus.boundingBox)) {
             player.die()
             cactus.stop()
@@ -162,6 +169,10 @@ class GameView : SurfaceView, Runnable {
 
                 for (rain in rainInstances) {
                     rain.draw(canvas, paint)
+                }
+
+                for (snow in snowInstances) {
+                    snow.draw(canvas, paint)
                 }
 
                 surfaceHolder?.unlockCanvasAndPost(canvas)
