@@ -3,10 +3,14 @@ package com.goncalorod.dinosaurs
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.LocationServices
@@ -17,6 +21,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +30,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var playButton         : Button
     private lateinit var leaderboardButton  : Button
+
+    private lateinit var locationIcon       : ImageView
+    private lateinit var locationDescription: TextView
 
     private var location : Location? = null
     private lateinit var weather : Weather
@@ -35,6 +43,9 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         user = auth.currentUser!!
+
+        locationIcon = findViewById(R.id.imageView_LocationIcon)
+        locationDescription = findViewById(R.id.textView_LocationDescription)
 
         getLocation()
 
@@ -108,7 +119,20 @@ class MainActivity : AppCompatActivity() {
         } else {
             LocationServices.getFusedLocationProviderClient(this).lastLocation.addOnSuccessListener { loc: Location? ->
                 location = loc
+
+                updateLocationInfo()
             }
+        }
+    }
+
+    private fun updateLocationInfo() {
+        if (location != null) {
+            locationIcon.setImageResource(R.drawable.ic_baseline_location_on_24)
+
+            var geocoder = Geocoder(this, Locale.getDefault())
+            var address = geocoder.getFromLocation(location!!.latitude, location!!.longitude, 1)[0]
+
+            locationDescription.text = "${address.locality}, ${address.countryName}"
         }
     }
 }
