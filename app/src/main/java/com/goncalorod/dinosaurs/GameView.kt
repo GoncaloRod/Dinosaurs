@@ -33,6 +33,7 @@ class GameView : SurfaceView, Runnable {
 
     private var sun: Sun? = null
     private var clouds: Clouds? = null
+    private var thunder: Thunder? = null
     private var rainInstances = arrayListOf<Rain>()
 
     private fun init(context: Context?, width: Int, height: Int, weather: Weather?){
@@ -47,9 +48,9 @@ class GameView : SurfaceView, Runnable {
         cactus = Cactus(context, screenWidth, screenHeight)
 
         //var condition = weather?.condition
-        //var condition = WeatherCondition.THUNDERSTORM
+        var condition = WeatherCondition.THUNDERSTORM
         //var condition = WeatherCondition.DRIZZLE
-        var condition = WeatherCondition.RAIN
+        //var condition = WeatherCondition.RAIN
         //var condition = WeatherCondition.SNOW
         //var condition = WeatherCondition.ATMOSPHERE
         //var condition = WeatherCondition.CLEAR
@@ -58,7 +59,7 @@ class GameView : SurfaceView, Runnable {
         when (condition) {
             WeatherCondition.THUNDERSTORM -> {
                 clouds = Clouds(context, screenWidth, screenHeight)
-                // TODO: Thunder
+                thunder = Thunder(context, screenWidth, screenHeight)
                 for (i in 0 until heavyRainAmount) {
                     rainInstances.add(Rain(context, screenWidth, screenHeight))
                 }
@@ -128,6 +129,7 @@ class GameView : SurfaceView, Runnable {
         cactus.update()
 
         clouds?.update()
+        thunder?.update()
 
         for (rain in rainInstances) {
             rain.update()
@@ -155,6 +157,7 @@ class GameView : SurfaceView, Runnable {
                 cactus.draw(canvas, paint)
 
                 sun?.draw(canvas, paint)
+                thunder?.draw(canvas, paint)
                 clouds?.draw(canvas, paint)
 
                 for (rain in rainInstances) {
@@ -195,6 +198,6 @@ class GameView : SurfaceView, Runnable {
 
     companion object {
         private const val lightRainAmount = 10
-        private const val heavyRainAmount = 50
+        private const val heavyRainAmount = 30
     }
 }
