@@ -32,6 +32,7 @@ class GameView : SurfaceView, Runnable {
     private lateinit var cactus: Cactus
 
     private var sun: Sun? = null
+    private var clouds: Clouds? = null
 
     private fun init(context: Context?, width: Int, height: Int, weather: Weather?){
         surfaceHolder = holder
@@ -44,20 +45,38 @@ class GameView : SurfaceView, Runnable {
         player = Player(context, screenWidth, screenHeight)
         cactus = Cactus(context, screenWidth, screenHeight)
 
-        when (weather?.condition) {
-            WeatherCondition.THUNDERSTORM -> TODO()
-            WeatherCondition.DRIZZLE -> TODO()
-            WeatherCondition.RAIN -> TODO()
-            WeatherCondition.SNOW -> TODO()
-            WeatherCondition.ATMOSPHERE -> TODO()
+        var condition = weather?.condition
+        //var condition = WeatherCondition.CLOUDS
+        //var condition = WeatherCondition.THUNDERSTORM
+
+        when (condition) {
+            WeatherCondition.THUNDERSTORM -> {
+                clouds = Clouds(context, screenWidth, screenHeight)
+                // TODO: Thunder
+                // TODO: Heavy rain
+            }
+            WeatherCondition.DRIZZLE -> {
+                clouds = Clouds(context, screenWidth, screenHeight)
+                // TODO: Light rain
+            }
+            WeatherCondition.RAIN -> {
+                clouds = Clouds(context, screenWidth, screenHeight)
+                // TODO: Heavy rain
+            }
+            WeatherCondition.SNOW -> {
+                clouds = Clouds(context, screenWidth, screenHeight)
+                // TODO: Snow
+            }
+            WeatherCondition.ATMOSPHERE -> {
+                clouds = Clouds(context, screenWidth, screenHeight)
+            }
             WeatherCondition.CLEAR -> {
                 sun = Sun(context, screenWidth, screenHeight)
             }
             WeatherCondition.CLOUDS -> {
                 sun = Sun(context, screenWidth, screenHeight)
+                clouds = Clouds(context, screenWidth, screenHeight)
             }
-            WeatherCondition.NONE -> TODO()
-            null -> TODO()
         }
     }
 
@@ -96,9 +115,13 @@ class GameView : SurfaceView, Runnable {
         player.update()
         cactus.update()
 
+        clouds?.update()
+
         if (Rect.intersects(player.boundingBox, cactus.boundingBox)) {
             player.die()
             cactus.stop()
+
+            clouds?.stop()
         }
     }
 
@@ -116,6 +139,7 @@ class GameView : SurfaceView, Runnable {
                 cactus.draw(canvas, paint)
 
                 sun?.draw(canvas, paint)
+                clouds?.draw(canvas, paint)
 
                 surfaceHolder?.unlockCanvasAndPost(canvas)
             }
