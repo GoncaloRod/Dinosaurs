@@ -80,9 +80,9 @@ class Player {
             speedY -= 2
 
         // Update bounding box
-        boundingBox.left    = (150 - offsetX).toInt()
+        boundingBox.left    = (150 - offsetX).toInt() + 30
         boundingBox.top     = ((maxY - offsetY - posY - 450).toInt())
-        boundingBox.right   = boundingBox.left + runSprite1.width
+        boundingBox.right   = boundingBox.left + runSprite1.width - 80
         boundingBox.bottom  = boundingBox.top + runSprite1.height
 
         // Animation
@@ -109,11 +109,16 @@ class Player {
             deadSprite
         }
 
+        /* Collider debug
+        paint.color = Color.MAGENTA
+        canvas?.drawRect(boundingBox, paint)
+        */
+
         canvas?.drawBitmap(spriteToDraw, 150f - offsetX, maxY - offsetY - posY - 450f, paint)
 
         paint.color = context?.resources?.getColor(R.color.game_paint_color) ?: Color.RED
         paint.textSize = textSize
-        canvas?.drawText("Score: ${score.toInt()}", scoreOffsetX, textSize + scoreOffsetY, paint)
+        canvas?.drawText("${context?.resources?.getString(R.string.score_label)}: ${score.toInt()}", scoreOffsetX, textSize + scoreOffsetY, paint)
     }
 
     fun jump() {

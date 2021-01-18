@@ -56,6 +56,11 @@ class Cactus {
 
     fun draw(canvas: Canvas?, paint: Paint) {
         canvas?.drawBitmap(sprite, posX - offsetX, maxY - offsetY - 450f, paint)
+
+        /* Collider debug
+        paint.color = Color.MAGENTA
+        canvas?.drawRect(boundingBox, paint)
+        */
     }
 
     private fun generatePosition() {
