@@ -33,6 +33,7 @@ class GameView : SurfaceView, Runnable {
 
     private var sun: Sun? = null
     private var clouds: Clouds? = null
+    private var rainInstances = arrayListOf<Rain>()
 
     private fun init(context: Context?, width: Int, height: Int, weather: Weather?){
         surfaceHolder = holder
@@ -45,23 +46,34 @@ class GameView : SurfaceView, Runnable {
         player = Player(context, screenWidth, screenHeight)
         cactus = Cactus(context, screenWidth, screenHeight)
 
-        var condition = weather?.condition
-        //var condition = WeatherCondition.CLOUDS
+        //var condition = weather?.condition
         //var condition = WeatherCondition.THUNDERSTORM
+        //var condition = WeatherCondition.DRIZZLE
+        var condition = WeatherCondition.RAIN
+        //var condition = WeatherCondition.SNOW
+        //var condition = WeatherCondition.ATMOSPHERE
+        //var condition = WeatherCondition.CLEAR
+        //var condition = WeatherCondition.CLOUDS
 
         when (condition) {
             WeatherCondition.THUNDERSTORM -> {
                 clouds = Clouds(context, screenWidth, screenHeight)
                 // TODO: Thunder
-                // TODO: Heavy rain
+                for (i in 0 until heavyRainAmount) {
+                    rainInstances.add(Rain(context, screenWidth, screenHeight))
+                }
             }
             WeatherCondition.DRIZZLE -> {
                 clouds = Clouds(context, screenWidth, screenHeight)
-                // TODO: Light rain
+                for (i in 0 until lightRainAmount) {
+                    rainInstances.add(Rain(context, screenWidth, screenHeight))
+                }
             }
             WeatherCondition.RAIN -> {
                 clouds = Clouds(context, screenWidth, screenHeight)
-                // TODO: Heavy rain
+                for (i in 0 until heavyRainAmount) {
+                    rainInstances.add(Rain(context, screenWidth, screenHeight))
+                }
             }
             WeatherCondition.SNOW -> {
                 clouds = Clouds(context, screenWidth, screenHeight)
@@ -117,6 +129,10 @@ class GameView : SurfaceView, Runnable {
 
         clouds?.update()
 
+        for (rain in rainInstances) {
+            rain.update()
+        }
+
         if (Rect.intersects(player.boundingBox, cactus.boundingBox)) {
             player.die()
             cactus.stop()
@@ -140,6 +156,10 @@ class GameView : SurfaceView, Runnable {
 
                 sun?.draw(canvas, paint)
                 clouds?.draw(canvas, paint)
+
+                for (rain in rainInstances) {
+                    rain.draw(canvas, paint)
+                }
 
                 surfaceHolder?.unlockCanvasAndPost(canvas)
             }
@@ -171,5 +191,10 @@ class GameView : SurfaceView, Runnable {
             }
         }
         return true
+    }
+
+    companion object {
+        private const val lightRainAmount = 10
+        private const val heavyRainAmount = 50
     }
 }
