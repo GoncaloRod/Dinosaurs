@@ -48,14 +48,7 @@ class GameView : SurfaceView, Runnable {
         player = Player(context, screenWidth, screenHeight)
         cactus = Cactus(context, screenWidth, screenHeight)
 
-        //var condition = weather?.condition
-        //var condition = WeatherCondition.THUNDERSTORM
-        //var condition = WeatherCondition.DRIZZLE
-        //var condition = WeatherCondition.RAIN
-        var condition = WeatherCondition.SNOW
-        //var condition = WeatherCondition.ATMOSPHERE
-        //var condition = WeatherCondition.CLEAR
-        //var condition = WeatherCondition.CLOUDS
+        var condition = weather?.condition
 
         when (condition) {
             WeatherCondition.THUNDERSTORM -> {
@@ -79,7 +72,7 @@ class GameView : SurfaceView, Runnable {
             }
             WeatherCondition.SNOW -> {
                 clouds = Clouds(context, screenWidth, screenHeight)
-                for (i in 0 until heavyRainAmount) {
+                for (i in 0 until lightRainAmount) {
                     snowInstances.add(Snow(context, screenWidth, screenHeight))
                 }
             }
