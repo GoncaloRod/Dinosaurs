@@ -41,12 +41,18 @@ class MainActivity : AppCompatActivity() {
         playButton = findViewById(R.id.button_Play)
         playButton.setOnClickListener {
 
+            playButton.isEnabled = false
+
             GlobalScope.async {
+
                 var weather = Weather.GetWeatherFromGPS(location)
 
                 val intent = Intent(this@MainActivity, GameActivity::class.java)
                 intent.putExtra(GameActivity.WEATHER_ID, weather.conditionID)
                 startActivity(intent)
+
+                playButton.isEnabled = true
+
             }
         }
 

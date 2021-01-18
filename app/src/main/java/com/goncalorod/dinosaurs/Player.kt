@@ -118,6 +118,7 @@ class Player {
 
         paint.color = context?.resources?.getColor(R.color.game_paint_color) ?: Color.RED
         paint.textSize = textSize
+        paint.typeface = context?.resources?.getFont(R.font.disposable_droid_bb)
         canvas?.drawText("${context?.resources?.getString(R.string.score_label)}: ${score.toInt()}", scoreOffsetX, textSize + scoreOffsetY, paint)
     }
 
