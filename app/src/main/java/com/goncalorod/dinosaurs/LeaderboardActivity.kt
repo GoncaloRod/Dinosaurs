@@ -19,6 +19,10 @@ class LeaderboardActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
+
+        val listViewScore = findViewById<ListView>(R.id.listView_leaderboard)
+        listViewScore.adapter = scoresAdapter
+
         val db = Firebase.firestore
         db.collection("scores").orderBy("score").get().addOnSuccessListener {
 
@@ -26,11 +30,10 @@ class LeaderboardActivity : AppCompatActivity() {
                 scores.add(Score(document.getString("player_name")!!, document.getLong("score")!!.toInt()))
             }
 
+            scoresAdapter.notifyDataSetChanged()
         }
 
-        val listViewScore = findViewById<ListView>(R.id.listView_leaderboard)
-        listViewScore.adapter = scoresAdapter
-        scoresAdapter.notifyDataSetChanged()
+
     }
 
 
