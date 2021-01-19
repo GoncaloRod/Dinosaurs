@@ -142,13 +142,22 @@ class Player {
         val db = Firebase.firestore
 
         db.collection("scores").document(user.uid).get().addOnSuccessListener {
-            if (it.getLong("score")!!.toInt() <= score) {
+            if (it.getLong("score") == null) {
                 val score = hashMapOf(
                         "player_name" to user.displayName,
                         "score" to score.toInt()
                 )
 
                 db.collection("scores").document(user.uid).set(score)
+            } else {
+                if (it.getLong("score")!!.toInt() <= score) {
+                    val score = hashMapOf(
+                            "player_name" to user.displayName,
+                            "score" to score.toInt()
+                    )
+
+                    db.collection("scores").document(user.uid).set(score)
+                }
             }
         }
     }
