@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -24,7 +25,7 @@ class LeaderboardActivity : AppCompatActivity() {
         listViewScore.adapter = scoresAdapter
 
         val db = Firebase.firestore
-        db.collection("scores").orderBy("score").get().addOnSuccessListener {
+        db.collection("scores").orderBy("score", Query.Direction.DESCENDING).get().addOnSuccessListener {
 
             for (document in it.documents){
                 scores.add(Score(document.getString("player_name")!!, document.getLong("score")!!.toInt()))
