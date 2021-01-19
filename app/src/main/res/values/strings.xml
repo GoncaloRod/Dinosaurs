@@ -10,4 +10,6 @@
 
     <!-- Game -->
     <string name="score_label">Score</string>
+
+    <string name="leaderboard_activity_title">Leaderboard</string>
 </resources>
